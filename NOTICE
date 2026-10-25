@@ -1,0 +1,25 @@
+GoEval
+Copyright 2026 GoEval contributors
+
+Portions of the algorithms, prompt instructions, and examples are adapted from
+works bearing the following copyright notices:
+
+Copyright [2023] [Vibrant Labs]
+Copyright [2024] [Confident AI Inc.]
+
+Those portions are distributed under the Apache License, Version 2.0.
+The common license text is included in LICENSE. The adaptations change the
+implementation language, provider interfaces, concurrent execution, dataset
+serialization, and HTTP transport. The original copyright notices are retained
+above. No endorsement by the original copyright holders is implied.
+
+The Porter stemmer adapts NLTK's PorterStemmer implementation, including its
+NLTK_EXTENSIONS behavior. NLTK Project and contributors; Apache-2.0.
+Source: https://github.com/nltk/nltk/blob/develop/nltk/stem/porter.py
+
+The 13a tokenizer and BLEU/chrF algorithms follow sacreBLEU; Apache-2.0.
+Matt Post and sacreBLEU contributors.
+Source: https://github.com/mjpost/sacrebleu
+
+Recorded reference scores are development fixtures. They require no
+interpreter or external service when building or testing this Go library.

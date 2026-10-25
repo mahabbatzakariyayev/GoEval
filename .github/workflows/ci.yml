@@ -1,0 +1,53 @@
+name: Go
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {os: ubuntu-latest, go: '1.23.x'}
+          - {os: ubuntu-latest, go: stable}
+          - {os: macos-latest, go: stable}
+          - {os: windows-latest, go: stable}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go }}
+          cache: false
+      - name: Formatting
+        run: test -z "$(gofmt -l .)"
+      - run: go vet ./...
+      - run: go test -race -cover ./...
+      - run: go build ./...
+      - name: Test library from a separate Go module
+        if: matrix.os == 'ubuntu-latest' && matrix.go == 'stable'
+        run: |
+          package_root="$PWD"
+          consumer_dir="$(mktemp -d)"
+          cp "$package_root/examples/quickstart/main.go" "$consumer_dir/"
+          cp "$package_root/examples/quickstart/evaluation_test.go" "$consumer_dir/"
+          cd "$consumer_dir"
+          go mod init example.com/goeval-consumer
+          go mod edit -require=github.com/mahabbatzakariyayev/GoEval@v0.0.0
+          go mod edit "-replace=github.com/mahabbatzakariyayev/GoEval=$package_root"
+          go mod tidy
+          go test -race ./...
+          go run .
+      - run: go run ./examples/quickstart
+      - run: go run ./internal/cmd/check-docs
+      - name: Static analysis
+        if: matrix.os == 'ubuntu-latest' && matrix.go == 'stable'
+        run: go run honnef.co/go/tools/cmd/staticcheck@v0.8.2 ./...
+      - name: Dataset fuzz smoke test
+        if: matrix.os == 'ubuntu-latest' && matrix.go == 'stable'
+        run: go test -run='^$' -fuzz=FuzzSampleJSONRoundTrip -fuzztime=10s -parallel=4 .

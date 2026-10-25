@@ -1,0 +1,2 @@
+{"user_input":"What is the capital of France?","response":"Paris","reference":"Paris","retrieved_contexts":["Paris is the capital of France."]}
+{"user_input":"What is the capital of Italy?","response":"Milan","reference":"Rome","retrieved_contexts":["Rome is the capital of Italy."]}

@@ -1,0 +1,761 @@
+{
+  "revision": "298b68274234c060deacab3cf5fb52aa3a20e885",
+  "prompts": {
+    "answer_correctness.CorrectnessClassifier": {
+      "source": "scorers/_answer_correctness.py",
+      "instruction": "Given a ground truth and an answer statements, analyze each statement and classify them in one of the following categories: TP (true positive): statements that are present in answer that are also directly supported by the one or more statements in ground truth, FP (false positive): statements present in the answer but not directly supported by any statement in ground truth, FN (false negative): statements found in the ground truth but not present in answer. Each statement can only belong to one of the categories. Provide a reason for each classification.",
+      "examples": [
+        [
+          {
+            "question": "What powers the sun and what is its primary function?",
+            "answer": [
+              "The sun is powered by nuclear fission, similar to nuclear reactors on Earth.",
+              "The primary function of the sun is to provide light to the solar system."
+            ],
+            "ground_truth": [
+              "The sun is powered by nuclear fusion, where hydrogen atoms fuse to form helium.",
+              "This fusion process in the sun's core releases a tremendous amount of energy.",
+              "The energy from the sun provides heat and light, which are essential for life on Earth.",
+              "The sun's light plays a critical role in Earth's climate system.",
+              "Sunlight helps to drive the weather and ocean currents."
+            ]
+          },
+          {
+            "TP": [
+              {
+                "statement": "The primary function of the sun is to provide light to the solar system.",
+                "reason": "This statement is somewhat supported by the ground truth mentioning the sun providing light and its roles, though it focuses more broadly on the sun's energy."
+              }
+            ],
+            "FP": [
+              {
+                "statement": "The sun is powered by nuclear fission, similar to nuclear reactors on Earth.",
+                "reason": "This statement is incorrect and contradicts the ground truth which states that the sun is powered by nuclear fusion."
+              }
+            ],
+            "FN": [
+              {
+                "statement": "The sun is powered by nuclear fusion, where hydrogen atoms fuse to form helium.",
+                "reason": "This accurate description of the sun’s power source is not included in the answer."
+              },
+              {
+                "statement": "This fusion process in the sun's core releases a tremendous amount of energy.",
+                "reason": "This process and its significance are not mentioned in the answer."
+              },
+              {
+                "statement": "The energy from the sun provides heat and light, which are essential for life on Earth.",
+                "reason": "The answer only mentions light, omitting the essential aspects of heat and its necessity for life, which the ground truth covers."
+              },
+              {
+                "statement": "The sun's light plays a critical role in Earth's climate system.",
+                "reason": "This broader impact of the sun’s light on Earth's climate system is not addressed in the answer."
+              },
+              {
+                "statement": "Sunlight helps to drive the weather and ocean currents.",
+                "reason": "The effect of sunlight on weather patterns and ocean currents is omitted in the answer."
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "question": "What is the boiling point of water?",
+            "answer": [
+              "The boiling point of water is 100 degrees Celsius at sea level"
+            ],
+            "ground_truth": [
+              "The boiling point of water is 100 degrees Celsius (212 degrees Fahrenheit) at sea level.",
+              "The boiling point of water can change with altitude."
+            ]
+          },
+          {
+            "TP": [
+              {
+                "statement": "The boiling point of water is 100 degrees Celsius at sea level",
+                "reason": "This statement is directly supported by the ground truth which specifies the boiling point of water as 100 degrees Celsius at sea level."
+              }
+            ],
+            "FP": [],
+            "FN": [
+              {
+                "statement": "The boiling point of water can change with altitude.",
+                "reason": "This additional information about how the boiling point of water can vary with altitude is not mentioned in the answer."
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    "answer_relevance.ResponseRelevancePrompt": {
+      "source": "scorers/_answer_relevance.py",
+      "instruction": "Generate a question for the given answer and Identify if answer is noncommittal. Give noncommittal as 1 if the answer is noncommittal and 0 if the answer is committal. A noncommittal answer is one that is evasive, vague, or ambiguous. For example, \"I don't know\" or \"I'm not sure\" are noncommittal answers",
+      "examples": [
+        [
+          {
+            "response": "Albert Einstein was born in Germany."
+          },
+          {
+            "question": "Where was Albert Einstein born?",
+            "noncommittal": 0
+          }
+        ],
+        [
+          {
+            "response": "I don't know about the  groundbreaking feature of the smartphone invented in 2023 as am unaware of information beyond 2022. "
+          },
+          {
+            "question": "What was the groundbreaking feature of the smartphone invented in 2023?",
+            "noncommittal": 1
+          }
+        ]
+      ]
+    },
+    "aspect_critic.SingleTurnAspectCriticPrompt": {
+      "source": "scorers/_aspect_critic.py",
+      "instruction": ""
+    },
+    "aspect_critic.MultiTurnAspectCriticPrompt": {
+      "source": "scorers/_aspect_critic.py",
+      "instruction": ""
+    },
+    "context_entities_recall.ExtractEntitiesPrompt": {
+      "source": "scorers/_context_entities_recall.py",
+      "instruction": "Given a text, extract unique entities without repetition. Ensure you consider different forms or mentions of the same entity as a single entity.",
+      "examples": [
+        [
+          {
+            "text": "The Eiffel Tower, located in Paris, France, is one of the most iconic landmarks globally. Millions of visitors are attracted to it each year for its breathtaking views of the city. Completed in 1889, it was constructed in time for the 1889 World's Fair."
+          },
+          {
+            "entities": [
+              "Eiffel Tower",
+              "Paris",
+              "France",
+              "1889",
+              "World's Fair"
+            ]
+          }
+        ],
+        [
+          {
+            "text": "The Colosseum in Rome, also known as the Flavian Amphitheatre, stands as a monument to Roman architectural and engineering achievement. Construction began under Emperor Vespasian in AD 70 and was completed by his son Titus in AD 80. It could hold between 50,000 and 80,000 spectators who watched gladiatorial contests and public spectacles."
+          },
+          {
+            "entities": [
+              "Colosseum",
+              "Rome",
+              "Flavian Amphitheatre",
+              "Vespasian",
+              "AD 70",
+              "Titus",
+              "AD 80"
+            ]
+          }
+        ],
+        [
+          {
+            "text": "The Great Wall of China, stretching over 21,196 kilometers from east to west, is a marvel of ancient defensive architecture. Built to protect against invasions from the north, its construction started as early as the 7th century BC. Today, it is a UNESCO World Heritage Site and a major tourist attraction."
+          },
+          {
+            "entities": [
+              "Great Wall of China",
+              "21,196 kilometers",
+              "7th century BC",
+              "UNESCO World Heritage Site"
+            ]
+          }
+        ],
+        [
+          {
+            "text": "The Apollo 11 mission, which launched on July 16, 1969, marked the first time humans landed on the Moon. Astronauts Neil Armstrong, Buzz Aldrin, and Michael Collins made history, with Armstrong being the first man to step on the lunar surface. This event was a significant milestone in space exploration."
+          },
+          {
+            "entities": [
+              "Apollo 11 mission",
+              "July 16, 1969",
+              "Moon",
+              "Neil Armstrong",
+              "Buzz Aldrin",
+              "Michael Collins"
+            ]
+          }
+        ]
+      ]
+    },
+    "context_precision.ContextPrecisionPrompt": {
+      "source": "scorers/_context_precision.py",
+      "instruction": "Given question, answer and context verify if the context was useful in arriving at the given answer. Give verdict as \"1\" if useful and \"0\" if not with json output.",
+      "examples": [
+        [
+          {
+            "question": "What can you tell me about Albert Einstein?",
+            "context": "Albert Einstein (14 March 1879 – 18 April 1955) was a German-born theoretical physicist, widely held to be one of the greatest and most influential scientists of all time. Best known for developing the theory of relativity, he also made important contributions to quantum mechanics, and was thus a central figure in the revolutionary reshaping of the scientific understanding of nature that modern physics accomplished in the first decades of the twentieth century. His mass–energy equivalence formula E = mc2, which arises from relativity theory, has been called 'the world's most famous equation'. He received the 1921 Nobel Prize in Physics 'for his services to theoretical physics, and especially for his discovery of the law of the photoelectric effect', a pivotal step in the development of quantum theory. His work is also known for its influence on the philosophy of science. In a 1999 poll of 130 leading physicists worldwide by the British journal Physics World, Einstein was ranked the greatest physicist of all time. His intellectual achievements and originality have made Einstein synonymous with genius.",
+            "answer": "Albert Einstein, born on 14 March 1879, was a German-born theoretical physicist, widely held to be one of the greatest and most influential scientists of all time. He received the 1921 Nobel Prize in Physics for his services to theoretical physics."
+          },
+          {
+            "reason": "The provided context was indeed useful in arriving at the given answer. The context includes key information about Albert Einstein's life and contributions, which are reflected in the answer.",
+            "verdict": 1
+          }
+        ],
+        [
+          {
+            "question": "who won 2020 icc world cup?",
+            "context": "The 2022 ICC Men's T20 World Cup, held from October 16 to November 13, 2022, in Australia, was the eighth edition of the tournament. Originally scheduled for 2020, it was postponed due to the COVID-19 pandemic. England emerged victorious, defeating Pakistan by five wickets in the final to clinch their second ICC Men's T20 World Cup title.",
+            "answer": "England"
+          },
+          {
+            "reason": "the context was useful in clarifying the situation regarding the 2020 ICC World Cup and indicating that England was the winner of the tournament that was intended to be held in 2020 but actually took place in 2022.",
+            "verdict": 1
+          }
+        ],
+        [
+          {
+            "question": "What is the tallest mountain in the world?",
+            "context": "The Andes is the longest continental mountain range in the world, located in South America. It stretches across seven countries and features many of the highest peaks in the Western Hemisphere. The range is known for its diverse ecosystems, including the high-altitude Andean Plateau and the Amazon rainforest.",
+            "answer": "Mount Everest."
+          },
+          {
+            "reason": "the provided context discusses the Andes mountain range, which, while impressive, does not include Mount Everest or directly relate to the question about the world's tallest mountain.",
+            "verdict": 0
+          }
+        ]
+      ]
+    },
+    "context_recall.ContextRecallClassificationPrompt": {
+      "source": "scorers/_context_recall.py",
+      "instruction": "Given a context, and an answer, analyze each sentence in the answer and classify if the sentence can be attributed to the given context or not. Use only 'Yes' (1) or 'No' (0) as a binary classification. Output json with reason.",
+      "examples": [
+        [
+          {
+            "question": "What can you tell me about albert Albert Einstein?",
+            "context": "Albert Einstein (14 March 1879 - 18 April 1955) was a German-born theoretical physicist, widely held to be one of the greatest and most influential scientists of all time. Best known for developing the theory of relativity, he also made important contributions to quantum mechanics, and was thus a central figure in the revolutionary reshaping of the scientific understanding of nature that modern physics accomplished in the first decades of the twentieth century. His mass-energy equivalence formula E = mc2, which arises from relativity theory, has been called 'the world's most famous equation'. He received the 1921 Nobel Prize in Physics 'for his services to theoretical physics, and especially for his discovery of the law of the photoelectric effect', a pivotal step in the development of quantum theory. His work is also known for its influence on the philosophy of science. In a 1999 poll of 130 leading physicists worldwide by the British journal Physics World, Einstein was ranked the greatest physicist of all time. His intellectual achievements and originality have made Einstein synonymous with genius.",
+            "answer": "Albert Einstein, born on 14 March 1879, was a German-born theoretical physicist, widely held to be one of the greatest and most influential scientists of all time. He received the 1921 Nobel Prize in Physics for his services to theoretical physics. He published 4 papers in 1905. Einstein moved to Switzerland in 1895."
+          },
+          {
+            "classifications": [
+              {
+                "statement": "Albert Einstein, born on 14 March 1879, was a German-born theoretical physicist, widely held to be one of the greatest and most influential scientists of all time.",
+                "reason": "The date of birth of Einstein is mentioned clearly in the context.",
+                "attributed": 1
+              },
+              {
+                "statement": "He received the 1921 Nobel Prize in Physics for his services to theoretical physics.",
+                "reason": "The exact sentence is present in the given context.",
+                "attributed": 1
+              },
+              {
+                "statement": "He published 4 papers in 1905.",
+                "reason": "There is no mention about papers he wrote in the given context.",
+                "attributed": 0
+              },
+              {
+                "statement": "Einstein moved to Switzerland in 1895.",
+                "reason": "There is no supporting evidence for this in the given context.",
+                "attributed": 0
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    "domain_specific_rubrics.SingleTurnPrompt": {
+      "source": "scorers/_domain_specific_rubrics.py",
+      "instruction": "Your task is to assign an appropriate score and provide feedback to the inputs based solely on the scoring criteria."
+    },
+    "domain_specific_rubrics.MultiTurnPrompt": {
+      "source": "scorers/_domain_specific_rubrics.py",
+      "instruction": "Your task is to assign an appropriate score and provide feedback to the inputs based solely on the scoring criteria."
+    },
+    "factual_correctness.ClaimDecompositionPrompt": {
+      "source": "scorers/_factual_correctness.py",
+      "instruction": "\n    Decompose and break down each of the input sentences into one or more standalone statements. Each statement should be a standalone claim that can be independently verified.\n    Follow the level of atomicity and coverage as shown in the examples.\n    ",
+      "variants": {
+        "low_atomicity_low_coverage": [
+          [
+            {
+              "response": "Charles Babbage was a French mathematician, philosopher, and food critic."
+            },
+            {
+              "claims": [
+                "Charles Babbage was a mathematician and philosopher."
+              ]
+            }
+          ],
+          [
+            {
+              "response": "Albert Einstein was a German theoretical physicist. He developed the theory of relativity and also contributed to the development of quantum mechanics."
+            },
+            {
+              "claims": [
+                "Albert Einstein was a German physicist.",
+                "Albert Einstein developed relativity and contributed to quantum mechanics."
+              ]
+            }
+          ]
+        ],
+        "low_atomicity_high_coverage": [
+          [
+            {
+              "response": "Charles Babbage was a French mathematician, philosopher, and food critic."
+            },
+            {
+              "claims": [
+                "Charles Babbage was a French mathematician, philosopher, and food critic."
+              ]
+            }
+          ],
+          [
+            {
+              "response": "Albert Einstein was a German theoretical physicist. He developed the theory of relativity and also contributed to the development of quantum mechanics."
+            },
+            {
+              "claims": [
+                "Albert Einstein was a German theoretical physicist.",
+                "Albert Einstein developed the theory of relativity and also contributed to the development of quantum mechanics."
+              ]
+            }
+          ]
+        ],
+        "high_atomicity_low_coverage": [
+          [
+            {
+              "response": "Charles Babbage was a French mathematician, philosopher, and food critic."
+            },
+            {
+              "claims": [
+                "Charles Babbage was a mathematician.",
+                "Charles Babbage was a philosopher."
+              ]
+            }
+          ],
+          [
+            {
+              "response": "Albert Einstein was a German theoretical physicist. He developed the theory of relativity and also contributed to the development of quantum mechanics."
+            },
+            {
+              "claims": [
+                "Albert Einstein was a German theoretical physicist.",
+                "Albert Einstein developed the theory of relativity."
+              ]
+            }
+          ]
+        ],
+        "high_atomicity_high_coverage": [
+          [
+            {
+              "response": "Charles Babbage was a French mathematician, philosopher, and food critic."
+            },
+            {
+              "claims": [
+                "Charles Babbage was a mathematician.",
+                "Charles Babbage was a philosopher.",
+                "Charles Babbage was a food critic.",
+                "Charles Babbage was French."
+              ]
+            }
+          ],
+          [
+            {
+              "response": "Albert Einstein was a German theoretical physicist. He developed the theory of relativity and also contributed to the development of quantum mechanics."
+            },
+            {
+              "claims": [
+                "Albert Einstein was a German theoretical physicist.",
+                "Albert Einstein developed the theory of relativity.",
+                "Albert Einstein contributed to the development of quantum mechanics."
+              ]
+            }
+          ]
+        ]
+      },
+      "examples": [
+        [
+          {
+            "response": "Charles Babbage was a French mathematician, philosopher, and food critic."
+          },
+          {
+            "claims": [
+              "Charles Babbage was a mathematician and philosopher."
+            ]
+          }
+        ],
+        [
+          {
+            "response": "Albert Einstein was a German theoretical physicist. He developed the theory of relativity and also contributed to the development of quantum mechanics."
+          },
+          {
+            "claims": [
+              "Albert Einstein was a German physicist.",
+              "Albert Einstein developed relativity and contributed to quantum mechanics."
+            ]
+          }
+        ]
+      ]
+    },
+    "faithfulness.StatementGeneratorPrompt": {
+      "source": "scorers/_faithfulness.py",
+      "instruction": "Given a question and an answer, analyze the complexity of each sentence in the answer. Break down each sentence into one or more fully understandable statements. Ensure that no pronouns are used in any statement. Format the outputs in JSON.",
+      "examples": [
+        [
+          {
+            "question": "Who was Albert Einstein and what is he best known for?",
+            "answer": "He was a German-born theoretical physicist, widely acknowledged to be one of the greatest and most influential physicists of all time. He was best known for developing the theory of relativity, he also made important contributions to the development of the theory of quantum mechanics."
+          },
+          {
+            "statements": [
+              "Albert Einstein was a German-born theoretical physicist.",
+              "Albert Einstein is recognized as one of the greatest and most influential physicists of all time.",
+              "Albert Einstein was best known for developing the theory of relativity.",
+              "Albert Einstein also made important contributions to the development of the theory of quantum mechanics."
+            ]
+          }
+        ]
+      ]
+    },
+    "faithfulness.NLIStatementPrompt": {
+      "source": "scorers/_faithfulness.py",
+      "instruction": "Your task is to judge the faithfulness of a series of statements based on a given context. For each statement you must return verdict as 1 if the statement can be directly inferred based on the context or 0 if the statement can not be directly inferred based on the context.",
+      "examples": [
+        [
+          {
+            "context": "John is a student at XYZ University. He is pursuing a degree in Computer Science. He is enrolled in several courses this semester, including Data Structures, Algorithms, and Database Management. John is a diligent student and spends a significant amount of time studying and completing assignments. He often stays late in the library to work on his projects.",
+            "statements": [
+              "John is majoring in Biology.",
+              "John is taking a course on Artificial Intelligence.",
+              "John is a dedicated student.",
+              "John has a part-time job."
+            ]
+          },
+          {
+            "statements": [
+              {
+                "statement": "John is majoring in Biology.",
+                "reason": "John's major is explicitly mentioned as Computer Science. There is no information suggesting he is majoring in Biology.",
+                "verdict": 0
+              },
+              {
+                "statement": "John is taking a course on Artificial Intelligence.",
+                "reason": "The context mentions the courses John is currently enrolled in, and Artificial Intelligence is not mentioned. Therefore, it cannot be deduced that John is taking a course on AI.",
+                "verdict": 0
+              },
+              {
+                "statement": "John is a dedicated student.",
+                "reason": "The context states that he spends a significant amount of time studying and completing assignments. Additionally, it mentions that he often stays late in the library to work on his projects, which implies dedication.",
+                "verdict": 1
+              },
+              {
+                "statement": "John has a part-time job.",
+                "reason": "There is no information given in the context about John having a part-time job.",
+                "verdict": 0
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "context": "Photosynthesis is a process used by plants, algae, and certain bacteria to convert light energy into chemical energy.",
+            "statements": [
+              "Albert Einstein was a genius."
+            ]
+          },
+          {
+            "statements": [
+              {
+                "statement": "Albert Einstein was a genius.",
+                "reason": "The context and statement are unrelated",
+                "verdict": 0
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    "goal_accuracy.InferGoalOutcomePrompt": {
+      "source": "scorers/_goal_accuracy.py",
+      "instruction": "Given an agentic workflow comprised of Human, AI and Tools, identify the user_goal (the task or objective the user wants to achieve) and the end_state (the final outcome or result of the workflow).",
+      "examples": [
+        [
+          {
+            "workflow": "\n            Human: Hey, book a table at the nearest best Chinese restaurant for 8:00pm\n            AI: Sure, let me find the best options for you.\n            Tools:\n                restaurant_search: {'cuisine': 'Chinese', 'time': '8:00pm'}\n            ToolOutput: Found a few options: 1. Golden Dragon, 2. Jade Palace\n            AI: I found some great options: Golden Dragon and Jade Palace. Which one would you prefer?\n            Human: Let's go with Golden Dragon.\n            AI: Great choice! I'll book a table for 8:00pm at Golden Dragon.\n            Tools:\n                restaurant_book: {'name': 'Golden Dragon', 'time': '8:00pm'}\n            ToolOutput: Table booked at Golden Dragon for 8:00pm.\n            AI: Your table at Golden Dragon is booked for 8:00pm. Enjoy your meal!\n            Human: thanks\n            "
+          },
+          {
+            "user_goal": "Book a table at the nearest best Chinese restaurant for 8:00pm.",
+            "end_state": "A table is successfully booked at Golden Dragon (Chinese restaurant) for 8:00pm."
+          }
+        ]
+      ]
+    },
+    "goal_accuracy.CompareOutcomePrompt": {
+      "source": "scorers/_goal_accuracy.py",
+      "instruction": "Given user goal, desired outcome and acheived outcome compare them and identify if they are the same (1) or different(0).",
+      "examples": [
+        [
+          {
+            "desired_outcome": "A table is successfully booked at any Chinese restaurant for 8:00pm.",
+            "arrived_outcome": "A table is successfully booked at Jade Palace (Chinese restaurant) for 8:00pm."
+          },
+          {
+            "reason": "The arrived outcome is same as the desired outcome and aligns with the user goal.",
+            "verdict": "1"
+          }
+        ]
+      ]
+    },
+    "instance_specific_rubrics.SingleTurnPrompt": {
+      "source": "scorers/_instance_specific_rubrics.py",
+      "instruction": "Your task is to assign an appropriate score and provide feedback to the inputs based solely on the scoring criteria passed in the input."
+    },
+    "instance_specific_rubrics.MultiTurnPrompt": {
+      "source": "scorers/_instance_specific_rubrics.py",
+      "instruction": "Your task is to assign an appropriate score and provide feedback to the inputs based solely on the scoring criteria passed in the input."
+    },
+    "multi_modal_faithfulness.MultiModalFaithfulnessPrompt": {
+      "source": "scorers/_multi_modal_faithfulness.py",
+      "instruction": "Please tell if a given piece of information is supported by the visual as well as textual context information. You need to answer with either True or False. Answer True if any of the image(s) and textual context supports the information",
+      "examples": [
+        [
+          {
+            "response": "Apple pie is generally double-crusted.",
+            "retrieved_contexts": [
+              "An apple pie is a fruit pie in which the principal filling ingredient is apples.",
+              "Apple pie is often served with whipped cream, ice cream ('apple pie à la mode'), custard or cheddar cheese.",
+              "It is generally double-crusted, with pastry both above and below the filling; the upper crust may be solid or latticed (woven of crosswise strips)."
+            ]
+          },
+          {
+            "faithful": true
+          }
+        ],
+        [
+          {
+            "response": "Apple pies tastes bad.",
+            "retrieved_contexts": [
+              "An apple pie is a fruit pie in which the principal filling ingredient is apples.",
+              "Apple pie is often served with whipped cream, ice cream ('apple pie à la mode'), custard or cheddar cheese.",
+              "It is generally double-crusted, with pastry both above and below the filling; the upper crust may be solid or latticed (woven of crosswise strips)."
+            ]
+          },
+          {
+            "faithful": false
+          }
+        ]
+      ]
+    },
+    "multi_modal_relevance.MultiModalRelevancePrompt": {
+      "source": "scorers/_multi_modal_relevance.py",
+      "instruction": "\nYour task is to evaluate if the response for the query is in line with the images and textual context information provided.\nYou have two options to answer. Either True / False.\nAnswer - True, if the response for the query is in line with context information otherwise False.\n",
+      "examples": [
+        [
+          {
+            "user_input": "What is the primary ingredient in a traditional Margherita pizza?",
+            "response": "The primary ingredients in a Margherita pizza are tomatoes, mozzarella cheese, and fresh basil.",
+            "retrieved_contexts": [
+              "A traditional Margherita pizza consists of a thin crust.",
+              "The main toppings include tomatoes, mozzarella cheese, fresh basil, salt, and olive oil.",
+              "It is one of the simplest and most classic types of pizza."
+            ]
+          },
+          {
+            "relevance": true
+          }
+        ],
+        [
+          {
+            "user_input": "Who won the Best Actor award at the Oscars in 2021?",
+            "response": "The Best Actor award in 2021 was won by Leonardo DiCaprio.",
+            "retrieved_contexts": [
+              "The 93rd Academy Awards were held in 2021.",
+              "Anthony Hopkins won the Best Actor award for his role in 'The Father'.",
+              "The event was unique due to COVID-19 restrictions."
+            ]
+          },
+          {
+            "relevance": false
+          }
+        ]
+      ]
+    },
+    "nv_metrics.AnswerAccuracy": {
+      "source": "scorers/_nv_metrics.py",
+      "template_accuracy1": "Instruction: You are a world class state of the art assistant for rating a User Answer given a Question. The Question is completely answered by the Reference Answer.\nSay 4, if User Answer is full contained and equivalent to Reference Answerin all terms, topics, numbers, metrics, dates and units.\nSay 2, if User Answer is partially contained and almost equivalent to Reference Answerin all terms, topics, numbers, metrics, dates and units.\nSay 0, if User Answer is not contained in Reference Answer or not accurate in all terms, topics,numbers, metrics, dates and units or the User Answer do not answer the question.\nDo not explain or justify your rating. Your rating must be only 4, 2 or 0 according to the instructions above.\n### Question: {query}\n### {answer0}: {sentence_inference}\n### {answer1}: {sentence_true}\nThe rating is:\n",
+      "template_accuracy2": "I will rate the User Answer in comparison to the Reference Answer for a given Question.\nA rating of 4 indicates that the User Answer is entirely consistent with the Reference Answer, covering all aspects, topics, numbers, metrics, dates, and units.\nA rating of 2 signifies that the User Answer is mostly aligned with the Reference Answer, with minor discrepancies in some areas.\nA rating of 0 means that the User Answer is either inaccurate, incomplete, or unrelated to the Reference Answer, or it fails to address the Question.\nI will provide the rating without any explanation or justification, adhering to the following scale: 0 (no match), 2 (partial match), 4 (exact match).\nDo not explain or justify my rating. My rating must be only 4, 2 or 0 only.\n\nQuestion: {query}\n\n{answer0}: {sentence_inference}\n\n{answer1}: {sentence_true}\n\nRating: "
+    },
+    "nv_metrics.ContextRelevance": {
+      "source": "scorers/_nv_metrics.py",
+      "template_relevance1": "### Instructions\n\nYou are a world class expert designed to evaluate the relevance score of a Context in order to answer the Question.\nYour task is to determine if the Context contains proper information to answer the Question.\nDo not rely on your previous knowledge about the Question.\nUse only what is written in the Context and in the Question.\nFollow the instructions below:\n0. If the context does not contains any relevant information to answer the question, say 0.\n1. If the context partially contains relevant information to answer the question, say 1.\n2. If the context contains any relevant information to answer the question, say 2.\nYou must provide the relevance score of 0, 1, or 2, nothing else.\nDo not explain.\n### Question: {query}\n\n### Context: {context}\n\nDo not try to explain.\nAnalyzing Context and Question, the Relevance score is ",
+      "template_relevance2": "As a specially designed expert to assess the relevance score of a given Context in relation to a Question, my task is to determine the extent to which the Context provides information necessary to answer the Question. I will rely solely on the information provided in the Context and Question, and not on any prior knowledge.\n\nHere are the instructions I will follow:\n* If the Context does not contain any relevant information to answer the Question, I will respond with a relevance score of 0.\n* If the Context partially contains relevant information to answer the Question, I will respond with a relevance score of 1.\n* If the Context contains any relevant information to answer the Question, I will respond with a relevance score of 2.\n\n### Question: {query}\n\n### Context: {context}\n\nDo not try to explain.\nBased on the provided Question and Context, the Relevance score is  ["
+    },
+    "nv_metrics.ResponseGroundedness": {
+      "source": "scorers/_nv_metrics.py",
+      "template_groundedness1": "### Instruction\n\nYou are a world class expert designed to evaluate the groundedness of an assertion.\nYou will be provided with an assertion and a context.\nYour task is to determine if the assertion is supported by the context.\nFollow the instructions below:\nA. If there is no context or no assertion or context is empty or assertion is empty, say 0.\nB. If the assertion is not supported by the context, say 0.\nC. If the assertion is partially supported by the context, say 1.\nD. If the assertion is fully supported by the context, say 2.\nYou must provide a rating of 0, 1, or 2, nothing else.\n\n### Context:\n<{context}>\n\n### Assertion:\n<{response}>\n\nAnalyzing Context and Response, the Groundedness score is ",
+      "template_groundedness2": "As a specialist in assessing the strength of connections between statements and their given contexts, I will evaluate the level of support an assertion receives from the provided context. Follow these guidelines:\n\n* If the assertion is not supported or context is empty or assertion is empty, assign a score of 0.\n* If the assertion is partially supported, assign a score of 1.\n* If the assertion is fully supported, assign a score of 2.\n\nI will provide a rating of 0, 1, or 2, without any additional information.\n\n---\n**Context:**\n[{context}]\n\n**Assertion:**\n[{response}]\n\nDo not explain.Based on the provided context and response, the Groundedness score is:"
+    },
+    "simple_criteria.SingleTurnSimpleCriteriaPrompt": {
+      "source": "scorers/_simple_criteria.py",
+      "instruction": ""
+    },
+    "simple_criteria.MultiTurnSimpleCriteriaPrompt": {
+      "source": "scorers/_simple_criteria.py",
+      "instruction": ""
+    },
+    "sql_semantic_equivalence.EquivalencePrompt": {
+      "source": "scorers/_sql_semantic_equivalence.py",
+      "instruction": "\n    Explain and compare two SQL queries (Q1 and Q2) based on the provided database schema. First, explain each query, then determine if they have significant logical differences.\n    ",
+      "examples": [
+        [
+          {
+            "reference": "SELECT id, name FROM users WHERE active = 1;",
+            "response": "SELECT id, name FROM users WHERE active = true;",
+            "database_schema": "\n                    Table users:\n                    - id: INT\n                    - name: VARCHAR\n                    - active: BOOLEAN\n                "
+          },
+          {
+            "response_query_explaination": "The generated SQL query retrieves the id and name of users where the active field is true.",
+            "reference_query_explaination": "The reference SQL query retrieves the id and name of users where the active field equals 1.",
+            "equivalence": true
+          }
+        ]
+      ]
+    },
+    "summarization.ExtractKeyphrasePrompt": {
+      "source": "scorers/_summarization.py",
+      "instruction": "Extract keyphrases of type: Person, Organization, Location, Date/Time, Monetary Values, and Percentages.",
+      "examples": [
+        [
+          {
+            "text": "Apple Inc. is a technology company based in Cupertino, California. Founded by Steve Jobs in 1976, it reached a market capitalization of $3 trillion in 2023."
+          },
+          {
+            "keyphrases": [
+              "Apple Inc.",
+              "Cupertino, California",
+              "Steve Jobs",
+              "1976",
+              "$3 trillion",
+              "2023"
+            ]
+          }
+        ]
+      ]
+    },
+    "summarization.GenerateQuestionsPrompt": {
+      "source": "scorers/_summarization.py",
+      "instruction": "Based on the given text and keyphrases, generate closed-ended questions that can be answered with '1' if the question can be answered using the text, or '0' if it cannot. The questions should ALWAYS result in a '1' based on the given text.",
+      "examples": [
+        [
+          {
+            "text": "Apple Inc. is a technology company based in Cupertino, California. Founded by Steve Jobs in 1976, it reached a market capitalization of $3 trillion in 2023.",
+            "keyphrases": [
+              "Apple Inc.",
+              "Cupertino, California",
+              "Steve Jobs",
+              "1976",
+              "$3 trillion",
+              "2023"
+            ]
+          },
+          {
+            "questions": [
+              "Is Apple Inc. a technology company?",
+              "Is Apple Inc. based in Cupertino, California?",
+              "Was Apple Inc. founded by Steve Jobs?",
+              "Was Apple Inc. founded in 1976?",
+              "Did Apple Inc. reach a market capitalization of $3 trillion?",
+              "Did Apple Inc. reach a market capitalization of $3 trillion in 2023?"
+            ]
+          }
+        ]
+      ]
+    },
+    "summarization.GenerateAnswersPrompt": {
+      "source": "scorers/_summarization.py",
+      "instruction": "Based on the list of close-ended '1' or '0' questions, generate a JSON with key 'answers', which is a list of strings that determines whether the provided summary contains sufficient information to answer EACH question. Answers should STRICTLY be either '1' or '0'. Answer '0' if the provided summary does not contain enough information to answer the question and answer '1' if the provided summary can answer the question.",
+      "examples": [
+        [
+          {
+            "summary": "Apple Inc. is a technology company based in Cupertino, California. Founded by Steve Jobs in 1976, it reached a market capitalization of $3 trillion in 2023.",
+            "questions": [
+              "Is Apple Inc. a technology company?",
+              "Is Apple Inc. based in Cupertino, California?",
+              "Was Apple Inc. founded by Steve Jobs?",
+              "Was Apple Inc. founded in 1976?",
+              "Did Apple Inc. reach a market capitalization of $3 trillion?",
+              "Did Apple Inc. reach a market capitalization of $3 trillion in 2023?",
+              "Is Apple Inc. a major software company?",
+              "Is Apple Inc. known for the iPhone?",
+              "Was Steve Jobs the co-founder of Apple Inc.?"
+            ]
+          },
+          {
+            "answers": [
+              "1",
+              "1",
+              "1",
+              "1",
+              "1",
+              "1",
+              "0",
+              "0",
+              "1"
+            ]
+          }
+        ]
+      ]
+    },
+    "topic_adherence.TopicClassificationPrompt": {
+      "source": "scorers/_topic_adherence.py",
+      "instruction": "Given a set of topics classify if the topic falls into any of the given reference topics.",
+      "examples": [
+        [
+          {
+            "reference_topics": [
+              "Physics",
+              "Mathematics"
+            ],
+            "topics": [
+              "Einstein's theory of relativity",
+              "General Theory of Relativity"
+            ]
+          },
+          {
+            "classifications": [
+              true,
+              false
+            ]
+          }
+        ]
+      ]
+    },
+    "topic_adherence.TopicRefusedPrompt": {
+      "source": "scorers/_topic_adherence.py",
+      "instruction": "Given a topic, classify if the AI refused to answer the question about the topic.",
+      "examples": [
+        [
+          {
+            "user_input": "Human: Can you provide me with details about Einstein's theory of relativity?\nAI: Sure, let me retrieve the relevant information for you.\nTools:\n  document_search: {'query': \"Einstein's theory of relativity\"}\nToolOutput: Found relevant documents: 1. Relativity: The Special and the General Theory, 2. General Theory of Relativity by A. Einstein.\nAI: I found some documents on Einstein's theory of relativity. Which one would you like to know more about: 'Relativity: The Special and the General Theory' or 'General Theory of Relativity by A. Einstein'?\nHuman: Tell me about the 'General Theory of Relativity'.\nAI: Got it! Let me fetch more details from 'General Theory of Relativity by A. Einstein'.\nTools:\n  document_retrieve: {'document': 'General Theory of Relativity by A. Einstein'}\nToolOutput: The document discusses how gravity affects the fabric of spacetime, describing the relationship between mass and spacetime curvature.\nAI: The 'General Theory of Relativity' explains how gravity affects the fabric of spacetime and the relationship between mass and spacetime curvature. Would you like more details or a specific explanation?\nHuman: That's perfect, thank you!\nAI: You're welcome! Feel free to ask if you need more information.",
+            "topic": "General Theory of Relativity"
+          },
+          {
+            "refused_to_answer": false
+          }
+        ]
+      ]
+    },
+    "topic_adherence.TopicExtractionPrompt": {
+      "source": "scorers/_topic_adherence.py",
+      "instruction": "Given an interaction between Human, Tool and AI, extract the topics from Human's input.",
+      "examples": [
+        [
+          {
+            "user_input": "Human: Can you provide me with details about Einstein's theory of relativity?\nAI: Sure, let me retrieve the relevant information for you.\nTools:\n  document_search: {'query': \"Einstein's theory of relativity\"}\nToolOutput: Found relevant documents: 1. Relativity: The Special and the General Theory, 2. General Theory of Relativity by A. Einstein.\nAI: I found some documents on Einstein's theory of relativity. Which one would you like to know more about: 'Relativity: The Special and the General Theory' or 'General Theory of Relativity by A. Einstein'?\nHuman: Tell me about the 'General Theory of Relativity'.\nAI: Got it! Let me fetch more details from 'General Theory of Relativity by A. Einstein'.\nTools:\n  document_retrieve: {'document': 'General Theory of Relativity by A. Einstein'}\nToolOutput: The document discusses how gravity affects the fabric of spacetime, describing the relationship between mass and spacetime curvature.\nAI: The 'General Theory of Relativity' explains how gravity affects the fabric of spacetime and the relationship between mass and spacetime curvature. Would you like more details or a specific explanation?\nHuman: That's perfect, thank you!\nAI: You're welcome! Feel free to ask if you need more information."
+          },
+          {
+            "topics": [
+              "Einstein's theory of relativity",
+              "General Theory of Relativity"
+            ]
+          }
+        ]
+      ]
+    }
+  }
+}
