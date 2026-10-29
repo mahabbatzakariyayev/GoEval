@@ -1,0 +1,63 @@
+name: Documentation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'website/**'
+      - 'examples/**'
+      - 'internal/docsite/**'
+      - 'internal/core/version.go'
+      - 'internal/cmd/docs/**'
+      - 'internal/cmd/check-docs/**'
+      - '.github/workflows/docs.yml'
+      - '*.go'
+      - 'go.mod'
+      - 'README.md'
+      - 'CONTRIBUTING.md'
+      - 'CHANGELOG.md'
+      - 'LICENSE'
+      - 'NOTICE'
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+          cache: false
+      - name: Check runnable examples
+        run: go run ./internal/cmd/check-docs
+      - name: Test the documentation renderer
+        run: go test ./internal/docsite
+      - name: Build and check site links
+        run: go run ./internal/cmd/docs
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: website/dist
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v5
+      - uses: actions/deploy-pages@v4
+        id: deployment

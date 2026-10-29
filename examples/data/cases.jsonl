@@ -1,0 +1,2 @@
+{"name":"France","input":"Capital of France?","output":"Paris","expected":"Paris"}
+{"name":"Italy","input":"Capital of Italy?","output":" Rome ","expected":"Rome"}

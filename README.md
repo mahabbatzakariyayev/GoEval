@@ -26,6 +26,27 @@ go get github.com/mahabbatzakariyayev/GoEval
 
 The import path is case-sensitive. The Go package name is `goeval`.
 
+## Documentation and how-to guides
+
+Read the [public documentation website](https://goeval-docs.mahabbatzakariya.chatgpt.site)
+for installation, how-to guides, and API examples. The repository also includes
+a GitHub Pages workflow; see [publishing the docs](docs/website.md).
+
+Start with the [documentation home](docs/index.md) or follow a guide:
+
+- [Getting started](docs/guides/getting-started.md)
+- [Choosing metrics](docs/guides/metrics.md) and [model-based evaluation](docs/guides/models.md)
+- [Datasets and reports](docs/guides/datasets.md)
+- [Testing and CI](docs/guides/testing.md)
+- [Custom metrics and judges](docs/guides/custom-metrics.md)
+- [Agent tools](docs/guides/agents.md) and [application experiments](docs/guides/experiments.md)
+- [Caching and performance](docs/guides/performance.md)
+- [Troubleshooting](docs/guides/troubleshooting.md) and [API reference](docs/reference.md)
+
+Run `make docs-serve` to browse the documentation website at
+`http://127.0.0.1:4173`. It includes search, theme controls, code copying, and
+mobile navigation. See [website publishing](docs/website.md) for GitHub Pages.
+
 ## Quick start
 
 This complete program needs no model, API key, or external service:

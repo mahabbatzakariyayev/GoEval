@@ -10,6 +10,7 @@ go test -race -cover ./...
 go build ./...
 go run ./examples/quickstart
 go run ./internal/cmd/check-docs
+go run ./internal/cmd/docs
 ```
 
 `make lint` runs the pinned Staticcheck release with a modern Go toolchain

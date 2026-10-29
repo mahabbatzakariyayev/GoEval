@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{{.Description}}">
+  <meta name="color-scheme" content="light dark">
+  <title>{{.Title}} · GoEval documentation</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('goeval-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch{}</script>
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="GoEval documentation home"><img src="assets/favicon.svg" alt="" width="30" height="30"><span>GoEval</span><span class="brand-label">/ docs</span></a>
+    <span class="version">{{.Version}}</span>
+    <button class="search-trigger" id="search-trigger" type="button" aria-label="Search documentation"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><span>Search documentation</span><kbd>⌘ K</kbd></button>
+    <a class="github-link" href="https://github.com/mahabbatzakariyayev/GoEval">GitHub <span aria-hidden="true">↗</span></a>
+    <button class="icon-button" id="theme-toggle" type="button" aria-label="Toggle dark theme" aria-pressed="false">◐</button>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-controls="sidebar" aria-expanded="false">Menu</button>
+  </header>
+  <button id="menu-overlay" class="menu-overlay" type="button" aria-label="Close navigation" hidden></button>
+  <aside class="sidebar" id="sidebar" aria-label="Documentation navigation">
+    <a class="sidebar-intro" href="index.html"><span class="status-dot"></span> The Go evaluation library</a>
+    <nav>
+      {{range .Groups}}<div class="nav-group"><p class="nav-label">{{.Title}}</p>{{range .Pages}}<a href="{{.Output}}" {{if eq .Output $.Output}}class="nav-link active" aria-current="page"{{else}}class="nav-link"{{end}}>{{.Title}}</a>{{end}}</div>{{end}}
+    </nav>
+    <div class="sidebar-footer"><span>Built for Go developers.</span><a href="https://pkg.go.dev/github.com/mahabbatzakariyayev/GoEval">Go package reference ↗</a></div>
+  </aside>
+  <div class="document-layout">
+    <main id="content" tabindex="-1">
+      <div class="page-context"><span>Documentation</span><span aria-hidden="true">/</span><span>{{.Group}}</span></div>
+      {{if .Home}}<div class="hero-flag"><span class="status-dot"></span> Native Go. Standard library only.</div>{{end}}
+      <article class="prose">{{.Content}}</article>
+      <div class="page-help"><span>Found something to improve?</span><a href="{{.EditURL}}">Edit this page ↗</a></div>
+      <nav class="page-pagination" aria-label="Previous and next pages">
+        {{if .Previous}}<a href="{{.Previous.Output}}"><span>← Previous</span><strong>{{.Previous.Title}}</strong></a>{{else}}<div></div>{{end}}
+        {{if .Next}}<a class="next-page" href="{{.Next.Output}}"><span>Next →</span><strong>{{.Next.Title}}</strong></a>{{end}}
+      </nav>
+      <footer class="page-footer"><span>GoEval · Open source · Apache-2.0</span><span><a href="LICENSE">License</a><a href="NOTICE">Notices</a></span></footer>
+    </main>
+    <aside class="page-toc" aria-label="On this page"><p>On this page</p><nav>{{range .Headings}}<a href="#{{.ID}}" {{if eq .Level 3}}class="toc-nested"{{end}}>{{.Text}}</a>{{end}}</nav><a class="toc-reference" href="https://pkg.go.dev/github.com/mahabbatzakariyayev/GoEval">Explore the API ↗</a></aside>
+  </div>
+  <dialog id="search-dialog" aria-labelledby="search-title">
+    <div class="search-heading"><h2 id="search-title">Search the docs</h2><button id="search-close" class="icon-button" type="button" aria-label="Close search">×</button></div>
+    <label class="sr-only" for="search-input">Search guides, concepts, and API</label>
+    <input id="search-input" type="search" autocomplete="off" placeholder="Try ‘faithfulness’, ‘cache’, or ‘threshold’…">
+    <p id="search-status" class="search-status" role="status" aria-live="polite">Start typing to find a guide.</p>
+    <div id="search-results" class="search-results"></div>
+    <div class="search-footer"><span>↑ ↓ to navigate</span><span>esc to close</span></div>
+  </dialog>
+  <noscript><div class="noscript-note">All guides work without JavaScript. Search, code copying, and theme controls require JavaScript.</div></noscript>
+</body>
+</html>

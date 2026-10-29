@@ -1,0 +1,20 @@
+[
+  {"title":"Overview","group":"Start here","source":"docs/index.md","output":"index.html","description":"Evaluate AI applications from Go with practical guides and runnable examples."},
+  {"title":"Getting started","group":"Start here","source":"docs/guides/getting-started.md","output":"getting-started.html","description":"Install GoEval and run your first offline evaluation."},
+  {"title":"Choose your metrics","group":"Start here","source":"docs/guides/metrics.md","output":"metrics.html","description":"Match evaluation metrics to your application, data, and quality gates."},
+  {"title":"Model-based evaluation","group":"Evaluate","source":"docs/guides/models.md","output":"models.html","description":"Configure an HTTP model provider and evaluate grounded answers."},
+  {"title":"Datasets and reports","group":"Evaluate","source":"docs/guides/datasets.md","output":"datasets.html","description":"Load JSONL cases, preserve metadata, and save evaluation reports."},
+  {"title":"Testing and CI","group":"Evaluate","source":"docs/guides/testing.md","output":"testing.html","description":"Add deterministic quality gates to go test and continuous integration."},
+  {"title":"Custom metrics and judges","group":"Extend","source":"docs/guides/custom-metrics.md","output":"custom-metrics.html","description":"Write your own deterministic scorer or model-based evaluation criterion."},
+  {"title":"Agent tool evaluation","group":"Extend","source":"docs/guides/agents.md","output":"agents.html","description":"Evaluate tool selection, arguments, ordering, and task completion."},
+  {"title":"Application experiments","group":"Extend","source":"docs/guides/experiments.md","output":"experiments.html","description":"Run an application on saved inputs and evaluate successful outputs."},
+  {"title":"Caching and performance","group":"Operate","source":"docs/guides/performance.md","output":"performance.html","description":"Control concurrency, deadlines, retries, and model-response caching."},
+  {"title":"Troubleshooting","group":"Operate","source":"docs/guides/troubleshooting.md","output":"troubleshooting.html","description":"Diagnose missing inputs, failed gates, model responses, and provider errors."},
+  {"title":"API reference","group":"Reference","source":"docs/reference.md","output":"reference.html","description":"Find the public GoEval types, functions, options, and advanced packages."},
+  {"title":"Detailed behavior","group":"Reference","source":"docs/usage.md","output":"usage.html","description":"Field presence, error handling, interchange, and execution semantics."},
+  {"title":"Feature coverage","group":"Reference","source":"docs/coverage.md","output":"coverage.html","description":"Implemented features, verification, and current limits."},
+  {"title":"Contributing","group":"Project","source":"CONTRIBUTING.md","output":"contributing.html","description":"Build, test, and contribute to GoEval."},
+  {"title":"Publishing the docs","group":"Project","source":"docs/website.md","output":"website.html","description":"Build, preview, and publish the GoEval documentation website."},
+  {"title":"Releasing GoEval","group":"Project","source":"docs/releasing.md","output":"releasing.html","description":"Prepare and publish a versioned Go package release."},
+  {"title":"Changelog","group":"Project","source":"CHANGELOG.md","output":"changelog.html","description":"Changes to the GoEval evaluation library."}
+]
